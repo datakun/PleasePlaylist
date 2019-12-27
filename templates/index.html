@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Please Playlist - 다른 음원 서비스 재생목록으로 유튜브 재생목록 만들기</title>
+
+    <link href="../static/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link href="../static/css/index.css" rel="stylesheet">
+
+    <script type="text/javascript">
+        function loadPlaylist() {
+            var playlist_url = document.getElementById('input-playlist-url').value;
+            var requestUrl = '/load-playlist?url=' + playlist_url;
+
+            // XMLHttpRequest 객체의 생성
+            const xhr = new XMLHttpRequest();
+            // 비동기 방식으로 Request를 오픈
+            xhr.open('POST', requestUrl);
+            // Request를 전송
+            xhr.send();
+
+            xhr.onreadystatechange = function (e) {
+                // readyStates는 XMLHttpRequest의 상태(state)를 반환
+                // readyState: 4 => DONE(서버 응답 완료)
+                if (xhr.readyState !== XMLHttpRequest.DONE)
+                    return;
+
+                // status는 response 상태 코드를 반환 : 200 => 정상 응답
+                if (xhr.status === 200) {
+                    var responseObject = JSON.parse(xhr.responseText);
+                    if (responseObject.playlist.length > 0) {
+                        var title = responseObject.title;
+                        var iTitle = document.createElement('h3');
+                        iTitle.innerHTML = title;
+                        document.getElementById('playlist-title').appendChild(iTitle);
+                        
+                        var itemCount = 0;
+                        responseObject.playlist.forEach(track => {
+                            var iDiv = document.createElement('div');
+                            iDiv.className = 'custom-control custom-checkbox';
+
+                            var iInput = document.createElement('input');
+                            iInput.type = 'checkbox';
+                            iInput.className = 'custom-control-input';
+                            iInput.id = 'check-' + itemCount;
+                            iInput.checked = true;
+
+                            var iLabel = document.createElement('label');
+                            iLabel.className = 'custom-control-label';
+                            iLabel.setAttribute('for', 'check-' + itemCount);
+                            
+                            var iH = document.createElement('h5');
+                            iH.innerHTML = track.song;
+                            
+                            iLabel.appendChild(iH);
+                            iLabel.append(track.artist);
+
+                            iDiv.appendChild(iInput);
+                            iDiv.appendChild(iLabel);
+
+                            document.getElementById('src-playlist-container').appendChild(iDiv);
+                            
+                            itemCount++;
+                        });
+                    } else {
+                        alert('재생목록을 가져오지 못했습니다.');
+                    }
+                } else {
+                    alert('재생목록 주소가 잘못됐습니다.');
+                }
+            };
+        }
+
+        function initApp() {
+            document.getElementById('btn-load-playlist').addEventListener('click', loadPlaylist, false);
+        }
+
+        window.onload = function () {
+            initApp();
+        };
+    </script>
+</head>
+
+<body>
+    <div class="main-container w-100 h-100 p-3 mx-auto ">
+        <header class="masthead">
+            <p class="masthead-header">
+                <h1>Please Playlist</h1>
+            </p>
+            <p class="lead">
+                <h3>다른 음원 서비스의 재생목록으로 유튜브 재생목록을 만들어보세요.</h3>
+            </p>
+            <p class="description">
+                1. 아래에 음원 서비스의 재생목록(애플 뮤직만 지원)의 주소를 복사한 후 가져오기 버튼을 누르세요.
+            </p>
+            <p class="description">
+                2. 제외하고 싶은 노래는 체크박스를 눌러서 제거한 후 유튜브 찾기 버튼을 누르세요.
+            </p>
+            <p class="description">
+                3. 재생 목록을 확인한 후 만들기 버튼을 눌러서 완료하세요.
+            </p>
+        </header>
+        <div class="row">
+            <input type="text" class="col form-control flex-grow-1" id="input-playlist-url" placeholder="재생목록 주소를 입력하세요">
+            <button class="col-auto btn btn-primary mb-2 ml-2" id="btn-load-playlist">가져오기</button>
+        </div>
+        <main role="main" class="h-75 content-container">
+            <div class="p-3 playlist-container" id="src-playlist-container">
+                <p class="lead" id="playlist-title">
+                </p>
+            </div>
+            <div class="p-3 playlist-container">
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

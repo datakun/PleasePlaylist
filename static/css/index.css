@@ -1,0 +1,77 @@
+html,
+body {
+    height: 100%;
+    background-color: white;
+}
+
+body {
+    color: black;
+}
+
+.main-container {
+    max-width: 960px;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 640px) {
+    .masthead-header {
+        float: left;
+    }
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.description {
+    float: left;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+}
+
+@media (min-width: 640px) {
+    .content-container {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        overflow: auto;
+    }
+}
+
+.playlist-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+}
+
+.custom-control {
+    min-height: auto;
+}
+
+.custom-checkbox.control-container {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.custom-checkbox.custom-control-label {
+    display: table-cell;
+    flex: 1;
+}
+
+.custom-control-label {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+h5 {
+    margin-bottom: -0.2rem;
+}
