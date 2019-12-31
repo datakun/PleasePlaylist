@@ -77,6 +77,11 @@ def load_playlist():
 
     return json.dumps(playlist_item)
 
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
 @app.route('/test')
 def testhtml():
     return render_template('test.html')

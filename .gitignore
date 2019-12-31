@@ -188,3 +188,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/web,linux,macos,python,windows,visualstudiocode
+
+gapi-config.js
